@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:500px;margin:40px auto">
+<h2>Cadastrar Loja - KacoZap</h2>
+<form id="f">
+<input name="store_name" placeholder="Nome da loja" required style="width:100%;padding:8px;margin:4px 0"><br>
+<input name="waba_phone_id" placeholder="Phone Number ID da 360dialog" required style="width:100%;padding:8px;margin:4px 0"><br>
+<input name="sheet_url" placeholder="Link Planilha Google" style="width:100%;padding:8px;margin:4px 0"><br>
+<input name="forbidden_phrases" placeholder="Frases proibidas, separadas por vírgula" style="width:100%;padding:8px;margin:4px 0"><br>
+<select name="fallback_type" style="width:100%;padding:8px;margin:4px 0">
+  <option value="notify_owner">Me chama no Zap se não souber</option>
+  <option value="collect_lead">Pega nome e tel do cliente</option>
+</select><br>
+<input name="owner_whatsapp" placeholder="Seu WhatsApp: 5511999999999" style="width:100%;padding:8px;margin:4px 0"><br>
+<select name="tone" style="width:100%;padding:8px;margin:4px 0">
+  <option value="profissional">Profissional</option>
+  <option value="simpatica">Vendedora simpática</option>
+  <option value="tiozao">Tiozão do Zap</option>
+</select><br>
+<button style="width:100%;padding:12px;background:#6e56cf;color:white;border:none;margin-top:8px">Salvar Loja</button>
+</form>
+<div id="msg"></div>
+<script>
+f.onsubmit = async (e) => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(f));
+  data.forbidden_phrases = data.forbidden_phrases.split(',').map(s=>s.trim()).filter(Boolean);
+  const r = await fetch('/api/tenant', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)});
+  msg.innerText = r.ok? 'Loja cadastrada! Já pode testar no WhatsApp.' : 'Erro ao salvar';
+  msg.style.color = r.ok? 'green' : 'red';
+}
+</script></body></html>
